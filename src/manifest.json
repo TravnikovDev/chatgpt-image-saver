@@ -7,23 +7,19 @@
   "action": {
     "default_popup": "index.html",
     "default_icon": {
-      "16": "assets/icon16.png",
-      "48": "assets/icon48.png",
-      "128": "assets/icon128.png"
+      "16": "src/assets/chatgpt_image_saver_icon.png"
     }
   },
   "background": {
-    "service_worker": "background.ts"
+    "service_worker": "src/background/background.ts"
   },
   "content_scripts": [
     {
       "matches": ["https://chat.openai.com/*"],
-      "js": ["contentScript.ts"]
+      "js": ["src/contentScripts/contentScript.ts"]
     }
   ],
   "icons": {
-    "16": "assets/icon16.png",
-    "48": "assets/icon48.png",
-    "128": "assets/icon128.png"
+    "16": "src/assets/chatgpt_image_saver_icon.png"
   }
 }
