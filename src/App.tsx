@@ -1,34 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  // State to hold the status of image saving
+  const [savingStatus, setSavingStatus] = useState("");
+
+  const saveImages = async () => {
+    // Set initial status
+    setSavingStatus("Saving images...");
+
+    try {
+      // Send a message to the current tab to trigger the content script
+      const [tab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
+      });
+      if (tab.id !== undefined) {
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: () => {
+            // This function will be executed in the context of the webpage
+            // You'll need to define the actual image saving logic in your content script
+            chrome.runtime.sendMessage({ action: "saveImages" });
+          },
+        });
+
+        // Update the UI to reflect the success or handle the response accordingly
+        setSavingStatus("Images saved successfully!");
+      }
+    } catch (error) {
+      console.error("Error saving images:", error);
+      setSavingStatus(
+        "Failed to save images. Check the console for more info."
+      );
+    }
+  };
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
+      <header className="App-header">
         <a href="https://reactjs.org" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+        <h1>ChatGPT Image Saver</h1>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          Click the button below to save images from the current ChatGPT
+          conversation.
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <button
+          onClick={saveImages}
+          disabled={savingStatus.startsWith("Saving")}
+        >
+          Save Images
+        </button>
+        {savingStatus && <p>{savingStatus}</p>}
+      </header>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

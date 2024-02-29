@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGPT Image Saver",
+  "version": "1.0.0",
+  "description": "Save images from ChatGPT conversations.",
+  "permissions": ["activeTab", "storage", "downloads"],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "icons": {
+    "16": "chatgpt_image_saver_icon.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["src/content.tsx"],
+      "matches": ["https://www.google.com/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  }
+}

@@ -1,0 +1,4 @@
+"background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  }
