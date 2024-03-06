@@ -3,21 +3,27 @@
   "name": "ChatGPT Image Saver",
   "version": "1.0.0",
   "description": "Save images from ChatGPT conversations.",
-  "permissions": ["activeTab", "storage", "downloads"],
+  "permissions": ["downloads", "scripting", "activeTab", "tabs"],
   "action": {
-    "default_popup": "index.html"
+    "default_icon": {
+      "16": "/icons/icon16.png",
+      "48": "/icons/icon48.png",
+      "128": "/icons/icon128.png"
+    },
+    "default_title": "Download Images"
   },
-  "icons": {
-    "16": "chatgpt_image_saver_icon.png"
+  "background": {
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "js": ["src/content.tsx"],
-      "matches": ["https://www.google.com/*"]
+      "matches": ["https://chat.openai.com/*"],
+      "js": ["contentScript.js"]
     }
   ],
-  "background": {
-    "service_worker": "src/background.ts",
-    "type": "module"
+  "icons": {
+    "16": "/icons/icon16.png",
+    "48": "/icons/icon48.png",
+    "128": "/icons/icon128.png"
   }
 }
