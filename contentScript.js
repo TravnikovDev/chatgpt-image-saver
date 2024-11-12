@@ -1,6 +1,8 @@
-// Find all images and send their URLs to the background script, along with the chat ID
+// Find all images under 'div.agent-turn' with src starting with 'https://files.oaiusercontent.com'
 document
-  .querySelectorAll('div[data-testid^="conversation-turn-"] .agent-turn img')
+  .querySelectorAll(
+    'div.agent-turn img[src^="https://files.oaiusercontent.com"]'
+  )
   .forEach((img, index) => {
     chrome.runtime.sendMessage({
       action: "download",
