@@ -4,13 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "extension@latest build",
+    "dev": "extension@latest dev",
+    "start": "extension start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/chrome": "^0.0.262",
+    "extension": "latest",
     "typescript": "^5.3.3"
   }
 }
