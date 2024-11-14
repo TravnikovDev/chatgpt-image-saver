@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "extension@latest build",
-    "dev": "extension@latest dev",
-    "start": "extension start"
+    "build": "extension build --browser=chrome --zip",
+    "dev": "extension dev --browser=chrome",
+    "start": "extension start --browser=chrome"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,6 @@
   "devDependencies": {
     "@types/chrome": "^0.0.262",
     "extension": "latest",
-    "typescript": "^5.3.3"
+    "typescript": "^5.6.3"
   }
 }

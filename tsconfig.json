@@ -1,12 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ES2020",
-    "strict": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist" // Specifies the output directory for all emitted files
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "node",
+    "module": "esnext",
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "esnext",
+    "verbatimModuleSyntax": true,
+    "useDefineForClassFields": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["./"],
+  "exclude": ["node_modules", "dist"]
 }
