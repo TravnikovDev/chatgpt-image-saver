@@ -3,7 +3,7 @@
   "name": "ChatGPT Image Saver",
   "version": "1.0.0",
   "description": "Save images from ChatGPT conversations.",
-  "permissions": ["downloads", "scripting", "activeTab", "tabs"],
+  "permissions": ["downloads", "scripting", "activeTab"],
   "action": {
     "default_icon": {
       "16": "/icons/icon16.png",
