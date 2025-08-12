@@ -19,7 +19,7 @@
     {
       "matches": ["https://chat.openai.com/*", "https://chatgpt.com/*"],
       "js": ["contentScript.js"],
-      "css": ["dummy.css"]
+      "css": ["content-script.css"]
     }
   ],
   "icons": {

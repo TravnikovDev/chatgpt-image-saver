@@ -10,13 +10,25 @@ ChatGPT Image Saver is a Chrome browser extension that enables users to bulk dow
 
 ## User Workflow
 
+### Current Enhanced Workflow (with UI)
+
 1. **Installation**: User installs the extension from Chrome Web Store or loads it manually
 2. **Navigate to ChatGPT**: User visits https://chat.openai.com/ or https://chatgpt.com/ and opens any conversation
-3. **Activate Extension**: User clicks the extension icon in the browser toolbar
-4. **Automatic Download**: Extension immediately scans the current conversation for all images in AI responses and downloads them
-5. **Organized Storage**: Images are automatically saved to `Downloads/{chat-id}/{index}.png` where:
-   - `chat-id` is extracted from the conversation URL and sanitized for filesystem compatibility
+3. **Floating UI**: A floating rounded square UI appears in the right middle of the screen with:
+   - **Save icon**: Main clickable area for quick download
+   - **Dropdown chevron**: Small vertical rectangle on the right for accessing options
+4. **Quick Download**: Click the save icon to immediately download all images (same as current functionality)
+5. **Advanced Options**: Click the dropdown chevron to access:
+   - **Custom folder name**: Override default chat-id folder naming
+   - **Progress tracking**: View real-time download progress with success/failure counts
+   - **Failed downloads**: Future feature to retry failed downloads
+6. **Organized Storage**: Images are saved to `Downloads/{folder-name}/{index}.png` where:
+   - `folder-name` is either custom name or sanitized chat-id
    - `index` is the sequential number of the image within that conversation
+
+### Legacy Workflow (browser toolbar)
+
+The original browser toolbar extension button still works as before for backward compatibility.
 
 ## Development Commands
 
@@ -29,15 +41,20 @@ ChatGPT Image Saver is a Chrome browser extension that enables users to bulk dow
 The extension follows Chrome Extension Manifest V3 architecture with two main components:
 
 ### Background Script (`background.js`)
-- Handles the extension button click events
+- Handles the extension button click events (legacy functionality)
 - Manages image download requests via Chrome Downloads API
-- Organizes downloaded images into folders named by chat ID
-- Sanitizes chat IDs for filesystem compatibility
+- Supports custom folder names from content script
+- Organizes downloaded images into folders (custom name or sanitized chat ID)
+- Tracks download success/failure status and communicates back to content script
+- Sanitizes folder names for filesystem compatibility
 
 ### Content Script (`contentScript.js`) 
-- Injected into ChatGPT pages when extension button is clicked
+- Auto-injected into ChatGPT pages via manifest content_scripts
+- Creates and manages floating UI with save button and dropdown
+- Handles UI interactions (save button clicks, dropdown toggle, custom folder input)
 - Finds all images within `.agent-turn` elements (ChatGPT's response containers)
-- Sends download requests to background script with image URLs, indices, and chat IDs
+- Sends download requests to background script with image URLs, indices, chat IDs, and custom folder names
+- Tracks and displays download progress in real-time
 
 ### File Structure
 - Main scripts: `background.js`, `contentScript.js`
