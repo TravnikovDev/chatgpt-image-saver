@@ -6,14 +6,14 @@
   right: 20px;
   transform: translateY(-50%);
   z-index: 10000;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .cgis-floating-container {
   display: flex;
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   border: 1px solid #e0e0e0;
   overflow: hidden;
 }
@@ -22,33 +22,58 @@
 html.dark .cgis-floating-container {
   background: #2d2d30;
   border-color: #4a4a4a;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .cgis-main-button {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   background: #10a37f;
   color: white;
   transition: background-color 0.2s;
+  padding: 4px 2px;
+  box-sizing: border-box;
 }
 
-.cgis-main-button:hover {
+.cgis-main-button:hover,
+.cgis-main-button:focus {
   background: #0f8b6c;
+  outline: none;
+}
+
+.cgis-main-button:focus {
+  box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.3);
 }
 
 .cgis-save-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  margin-bottom: 2px;
+}
+
+.cgis-button-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.cgis-text-line1,
+.cgis-text-line2 {
+  font-size: 8px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .cgis-dropdown-btn {
   width: 16px;
-  height: 44px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,8 +83,14 @@ html.dark .cgis-floating-container {
   transition: background-color 0.2s;
 }
 
-.cgis-dropdown-btn:hover {
+.cgis-dropdown-btn:hover,
+.cgis-dropdown-btn:focus {
   background: #ebebeb;
+  outline: none;
+}
+
+.cgis-dropdown-btn:focus {
+  box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.3);
 }
 
 html.dark .cgis-dropdown-btn {
@@ -67,7 +98,8 @@ html.dark .cgis-dropdown-btn {
   border-left-color: #52525b;
 }
 
-html.dark .cgis-dropdown-btn:hover {
+html.dark .cgis-dropdown-btn:hover,
+html.dark .cgis-dropdown-btn:focus {
   background: #52525b;
 }
 
@@ -88,7 +120,7 @@ html.dark .cgis-dropdown-btn:hover {
   width: 280px;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   border: 1px solid #e0e0e0;
   padding: 16px;
   margin-top: 8px;
@@ -98,7 +130,7 @@ html.dark .cgis-dropdown-btn:hover {
 html.dark .cgis-dropdown-panel {
   background: #2d2d30;
   border-color: #4a4a4a;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .cgis-dropdown-panel.open {
@@ -194,4 +226,15 @@ html.dark .cgis-progress-bar {
 .cgis-failed {
   color: #dc2626;
   font-weight: 500;
+}
+
+.cgis-help-text {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+html.dark .cgis-help-text {
+  color: #9ca3af;
 }
