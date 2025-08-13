@@ -5,6 +5,9 @@ class ChatGPTImageSaver {
     this.isDropdownOpen = false;
     this.downloadProgress = { total: 0, success: 0, failed: 0 };
     this.customFolderName = '';
+    this.failedDownloads = []; // Store failed download info for retry
+    this.retryAttempts = 0;
+    this.maxRetryAttempts = 3;
     this.init();
   }
 
@@ -74,6 +77,15 @@ class ChatGPTImageSaver {
               <span class="cgis-failed" aria-label="Failed downloads">✗ 0</span>
             </div>
           </div>
+          <div class="cgis-retry-section" id="cgis-retry-section" style="display: none;">
+            <button class="cgis-retry-btn" id="cgis-retry-btn" 
+                    role="button" 
+                    tabindex="0"
+                    aria-label="Retry downloading failed images" 
+                    title="Click to retry downloading the failed images">
+              🔄 Retry Failed Images
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -129,6 +141,18 @@ class ChatGPTImageSaver {
     folderInput.addEventListener('input', (e) => {
       this.customFolderName = e.target.value.trim();
     });
+
+    // Retry button events
+    const retryBtn = document.getElementById('cgis-retry-btn');
+    if (retryBtn) {
+      retryBtn.addEventListener('click', () => this.retryFailedDownloads());
+      retryBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.retryFailedDownloads();
+        }
+      });
+    }
   }
 
   toggleDropdown() {
@@ -168,25 +192,39 @@ class ChatGPTImageSaver {
     
     if (images.length === 0) {
       this.updateProgressText('No images found');
+      // Open dropdown to show the "no images" message
+      if (!this.isDropdownOpen) {
+        this.toggleDropdown();
+      }
       return;
+    }
+
+    // Auto-open dropdown to show progress
+    if (!this.isDropdownOpen) {
+      this.toggleDropdown();
     }
 
     // Reset and initialize progress
     this.downloadProgress = { total: images.length, success: 0, failed: 0 };
+    this.failedDownloads = []; // Reset failed downloads
+    this.retryAttempts = 0; // Reset retry counter
+    this.hideRetryButton(); // Hide retry button
     this.updateProgressText(`Downloading ${images.length} images...`);
     this.updateProgressBar();
 
     const folderName = this.customFolderName || this.getCurrentChatId();
 
     images.forEach((img, index) => {
-      chrome.runtime.sendMessage({
+      const downloadInfo = {
         action: "download",
         url: img.src,
         index: index,
         chatId: this.getCurrentChatId(),
         customFolder: this.customFolderName,
         folderName: folderName
-      });
+      };
+      
+      chrome.runtime.sendMessage(downloadInfo);
     });
   }
 
@@ -204,9 +242,32 @@ class ChatGPTImageSaver {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.action === "downloadComplete") {
         this.downloadProgress.success++;
+        // Remove from failed downloads if it was previously failed and now succeeded
+        this.failedDownloads = this.failedDownloads.filter(failed => 
+          !(failed.url === message.url && failed.index === message.index)
+        );
         this.updateProgress();
       } else if (message.action === "downloadFailed") {
         this.downloadProgress.failed++;
+        
+        // Store failed download info for retry
+        const failedDownload = {
+          url: message.url,
+          index: message.index,
+          error: message.error,
+          chatId: this.getCurrentChatId(),
+          customFolder: this.customFolderName,
+          folderName: this.customFolderName || this.getCurrentChatId()
+        };
+        
+        // Add to failed downloads if not already present
+        const existingIndex = this.failedDownloads.findIndex(failed => 
+          failed.url === message.url && failed.index === message.index
+        );
+        if (existingIndex === -1) {
+          this.failedDownloads.push(failedDownload);
+        }
+        
         this.updateProgress();
       }
     });
@@ -217,9 +278,16 @@ class ChatGPTImageSaver {
     
     const completed = this.downloadProgress.success + this.downloadProgress.failed;
     if (completed === this.downloadProgress.total) {
-      this.updateProgressText(`Complete! ${this.downloadProgress.success} successful, ${this.downloadProgress.failed} failed`);
+      if (this.downloadProgress.failed > 0) {
+        this.updateProgressText(`Complete! ${this.downloadProgress.success} successful, ${this.downloadProgress.failed} failed`);
+        this.showRetryButton();
+      } else {
+        this.updateProgressText(`Complete! All ${this.downloadProgress.success} images downloaded successfully`);
+        this.hideRetryButton();
+      }
     } else {
       this.updateProgressText(`Downloading... ${completed}/${this.downloadProgress.total}`);
+      this.hideRetryButton();
     }
   }
 
@@ -241,6 +309,61 @@ class ChatGPTImageSaver {
   updateProgressText(text) {
     const progressText = document.querySelector('.cgis-progress-text');
     if (progressText) progressText.textContent = text;
+  }
+
+  showRetryButton() {
+    const retrySection = document.getElementById('cgis-retry-section');
+    if (retrySection) {
+      retrySection.style.display = 'block';
+    }
+  }
+
+  hideRetryButton() {
+    const retrySection = document.getElementById('cgis-retry-section');
+    if (retrySection) {
+      retrySection.style.display = 'none';
+    }
+  }
+
+  retryFailedDownloads() {
+    if (this.failedDownloads.length === 0) {
+      this.updateProgressText('No failed downloads to retry');
+      return;
+    }
+
+    // Check if we've exceeded max retry attempts
+    if (this.retryAttempts >= this.maxRetryAttempts) {
+      this.updateProgressText(`Max retry attempts (${this.maxRetryAttempts}) reached. ${this.failedDownloads.length} images still failed.`);
+      return;
+    }
+
+    this.retryAttempts++;
+    this.hideRetryButton();
+    
+    // Reset only the failed count for the retry
+    const failedCount = this.failedDownloads.length;
+    this.downloadProgress.failed = 0;
+    
+    this.updateProgressText(`Retry attempt ${this.retryAttempts}/${this.maxRetryAttempts}: Retrying ${failedCount} failed images...`);
+    this.updateProgressBar();
+
+    // Make a copy of failed downloads since the array may be modified during retry
+    const failedToRetry = [...this.failedDownloads];
+    this.failedDownloads = []; // Clear the array, it will be repopulated if downloads fail again
+
+    // Retry each failed download
+    failedToRetry.forEach((failedDownload) => {
+      const downloadInfo = {
+        action: "download",
+        url: failedDownload.url,
+        index: failedDownload.index,
+        chatId: failedDownload.chatId,
+        customFolder: failedDownload.customFolder,
+        folderName: failedDownload.folderName
+      };
+      
+      chrome.runtime.sendMessage(downloadInfo);
+    });
   }
 }
 

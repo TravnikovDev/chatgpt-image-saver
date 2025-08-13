@@ -238,3 +238,49 @@ html.dark .cgis-progress-bar {
 html.dark .cgis-help-text {
   color: #9ca3af;
 }
+
+.cgis-retry-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+html.dark .cgis-retry-section {
+  border-top-color: #4b5563;
+}
+
+.cgis-retry-btn {
+  width: 100%;
+  padding: 8px 16px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cgis-retry-btn:hover,
+.cgis-retry-btn:focus {
+  background: #d97706;
+  outline: none;
+}
+
+.cgis-retry-btn:focus {
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+}
+
+html.dark .cgis-retry-btn {
+  background: #f59e0b;
+}
+
+html.dark .cgis-retry-btn:hover,
+html.dark .cgis-retry-btn:focus {
+  background: #d97706;
+}

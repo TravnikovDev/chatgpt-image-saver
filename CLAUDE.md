@@ -15,14 +15,21 @@ ChatGPT Image Saver is a Chrome browser extension that enables users to bulk dow
 1. **Installation**: User installs the extension from Chrome Web Store or loads it manually
 2. **Navigate to ChatGPT**: User visits https://chat.openai.com/ or https://chatgpt.com/ and opens any conversation
 3. **Floating UI**: A floating rounded square UI appears in the right middle of the screen with:
-   - **Save icon**: Main clickable area for quick download
+   - **"Save Images" button**: Main clickable area with icon and text label for quick download
    - **Dropdown chevron**: Small vertical rectangle on the right for accessing options
-4. **Quick Download**: Click the save icon to immediately download all images (same as current functionality)
-5. **Advanced Options**: Click the dropdown chevron to access:
-   - **Custom folder name**: Override default chat-id folder naming
-   - **Progress tracking**: View real-time download progress with success/failure counts
-   - **Failed downloads**: Future feature to retry failed downloads
-6. **Organized Storage**: Images are saved to `Downloads/{folder-name}/{index}.png` where:
+4. **Automatic Download Process**: Click the "Save Images" button to start downloading:
+   - **Dropdown auto-opens** to show real-time progress and options
+   - **Progress tracking**: Live updates with success/failure counts and progress bar
+   - **Smart retry system**: Automatically handles failed downloads
+5. **Advanced Options**: The dropdown panel provides:
+   - **Custom folder name**: Override default chat-id folder naming with helpful placeholder text
+   - **Real-time progress**: Visual progress bar and statistics (✓ successful, ✗ failed)
+   - **Intelligent retry**: "🔄 Retry Failed Images" button appears automatically when downloads fail
+6. **Robust Download Completion**: 
+   - **Automatic retry**: Up to 3 retry attempts for failed images
+   - **Smart tracking**: Only retries failed images, not successful ones
+   - **Complete success**: Continues until all images are downloaded or max retries reached
+7. **Organized Storage**: Images are saved to `Downloads/{folder-name}/{index}.png` where:
    - `folder-name` is either custom name or sanitized chat-id
    - `index` is the sequential number of the image within that conversation
 
@@ -50,11 +57,13 @@ The extension follows Chrome Extension Manifest V3 architecture with two main co
 
 ### Content Script (`contentScript.js`) 
 - Auto-injected into ChatGPT pages via manifest content_scripts
-- Creates and manages floating UI with save button and dropdown
-- Handles UI interactions (save button clicks, dropdown toggle, custom folder input)
+- Creates and manages floating UI with "Save Images" button and dropdown panel
+- Handles UI interactions (save button clicks, dropdown toggle, custom folder input, retry button)
 - Finds all images within `.agent-turn` elements (ChatGPT's response containers)
 - Sends download requests to background script with image URLs, indices, chat IDs, and custom folder names
-- Tracks and displays download progress in real-time
+- Tracks and displays download progress in real-time with visual progress bar
+- **Smart retry system**: Tracks failed downloads and provides automatic retry functionality
+- **Accessibility features**: Full ARIA labels, keyboard navigation, tooltips, and screen reader support
 
 ### File Structure
 - Main scripts: `background.js`, `contentScript.js`
@@ -70,3 +79,7 @@ The extension follows Chrome Extension Manifest V3 architecture with two main co
 - Downloads are organized by chat ID extracted from URL pathname
 - Images are indexed sequentially within each chat folder
 - Uses `conflictAction: "uniquify"` to handle filename conflicts
+- **Retry mechanism**: Tracks failed downloads and automatically retries up to 3 times
+- **Progress tracking**: Real-time updates with ARIA live regions for accessibility
+- **Smart UI**: Dropdown auto-opens during downloads, retry button appears only when needed
+- **Robust error handling**: Comprehensive failure tracking and user-friendly error messages
