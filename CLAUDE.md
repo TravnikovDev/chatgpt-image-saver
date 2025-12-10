@@ -4,7 +4,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Description
 
-ChatGPT Bulk Image Downloader is a Chrome browser extension that enables users to bulk download all images from ChatGPT conversations with a single click. The extension automatically organizes downloaded images by conversation, making it easy to save and manage AI-generated images from ChatGPT sessions.
+ChatGPT Bulk Image Downloader lets you grab every image in a ChatGPT conversation instantly—fast, reliable, and neatly organized.
+
+What makes it great:
+- One-click save: Floating “Save Images” button right on the page.
+- Live progress: Watch downloads as they happen.
+- Auto-retry: Automatically re-downloads any failed files.
+- Organized folders: Saves into tidy, named folders in Downloads.
+- Full quality: Fetches the original file with no compression.
+
+How it works:
+1) Install the extension.
+2) Open any ChatGPT conversation.
+3) Click Save Images.
+4) Find the images in your Downloads folder.
+
+Why you’ll like it:
+- Saves time on bulk image grabs.
+- Gets every image, reliably.
+- Simple to use—no setup needed.
+- Works offline; nothing is sent anywhere.
 
 **Chrome Web Store**: https://chromewebstore.google.com/detail/pidbeaifkcbphmlmlnglddbfackeeiah?utm_source=item-share-cb
 
