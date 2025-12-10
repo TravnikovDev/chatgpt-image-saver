@@ -1,4 +1,4 @@
-// ChatGPT Image Saver - Enhanced UI Content Script
+// ChatGPT Bulk Image Downloader - Enhanced UI Content Script
 
 class ChatGPTImageSaver {
   constructor() {

@@ -1,4 +1,4 @@
-// ChatGPT Image Saver - Enhanced Background Script
+// ChatGPT Bulk Image Downloader - Enhanced Background Script
 
 // Legacy functionality: Handle extension button clicks (for backward compatibility)
 chrome.action.onClicked.addListener((tab) => {
