@@ -4,7 +4,7 @@ class ChatGPTImageSaver {
   constructor() {
     this.isDropdownOpen = false;
     this.downloadProgress = { total: 0, success: 0, failed: 0 };
-    this.customFolderName = '';
+    this.customFolderName = "";
     this.failedDownloads = []; // Store failed download info for retry
     this.retryAttempts = 0;
     this.maxRetryAttempts = 3;
@@ -18,7 +18,9 @@ class ChatGPTImageSaver {
 
   createFloatingUI() {
     // Remove existing UI if present
-    const existingUI = document.getElementById('chatgpt-image-saver-ui');
+    const existingUI = document.getElementById(
+      "chatgpt-bulk-image-downloader-ui"
+    );
     if (existingUI) {
       existingUI.remove();
     }
@@ -27,8 +29,8 @@ class ChatGPTImageSaver {
     const currentChatId = this.getCurrentChatId();
 
     // Create main container
-    const container = document.createElement('div');
-    container.id = 'chatgpt-image-saver-ui';
+    const container = document.createElement("div");
+    container.id = "chatgpt-bulk-image-downloader-ui";
     container.innerHTML = `
       <div class="cgis-floating-container">
         <div class="cgis-main-button" id="cgis-save-btn" 
@@ -96,58 +98,58 @@ class ChatGPTImageSaver {
   }
 
   setupEventListeners() {
-    const saveBtn = document.getElementById('cgis-save-btn');
-    const dropdownBtn = document.getElementById('cgis-dropdown-btn');
-    const dropdownPanel = document.getElementById('cgis-dropdown-panel');
-    const folderInput = document.getElementById('cgis-folder-input');
+    const saveBtn = document.getElementById("cgis-save-btn");
+    const dropdownBtn = document.getElementById("cgis-dropdown-btn");
+    const dropdownPanel = document.getElementById("cgis-dropdown-panel");
+    const folderInput = document.getElementById("cgis-folder-input");
 
     // Initialize with current value
     this.customFolderName = folderInput.value;
 
     // Save button events
-    saveBtn.addEventListener('click', () => this.startDownload());
-    saveBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+    saveBtn.addEventListener("click", () => this.startDownload());
+    saveBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         this.startDownload();
       }
     });
 
     // Dropdown button events
-    dropdownBtn.addEventListener('click', () => this.toggleDropdown());
-    dropdownBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+    dropdownBtn.addEventListener("click", () => this.toggleDropdown());
+    dropdownBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         this.toggleDropdown();
-      } else if (e.key === 'Escape') {
-        this.closeDropdown();
-      }
-    });
-    
-    // Close dropdown when clicking outside or pressing Escape
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('#chatgpt-image-saver-ui')) {
+      } else if (e.key === "Escape") {
         this.closeDropdown();
       }
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.isDropdownOpen) {
+    // Close dropdown when clicking outside or pressing Escape
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#chatgpt-bulk-image-downloader-ui")) {
+        this.closeDropdown();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.isDropdownOpen) {
         this.closeDropdown();
         dropdownBtn.focus();
       }
     });
 
-    folderInput.addEventListener('input', (e) => {
+    folderInput.addEventListener("input", (e) => {
       this.customFolderName = e.target.value.trim();
     });
 
     // Retry button events
-    const retryBtn = document.getElementById('cgis-retry-btn');
+    const retryBtn = document.getElementById("cgis-retry-btn");
     if (retryBtn) {
-      retryBtn.addEventListener('click', () => this.retryFailedDownloads());
-      retryBtn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+      retryBtn.addEventListener("click", () => this.retryFailedDownloads());
+      retryBtn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           this.retryFailedDownloads();
         }
@@ -157,41 +159,41 @@ class ChatGPTImageSaver {
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
-    const dropdownPanel = document.getElementById('cgis-dropdown-panel');
-    const dropdownBtn = document.getElementById('cgis-dropdown-btn');
-    const chevron = document.querySelector('.cgis-chevron');
-    
+    const dropdownPanel = document.getElementById("cgis-dropdown-panel");
+    const dropdownBtn = document.getElementById("cgis-dropdown-btn");
+    const chevron = document.querySelector(".cgis-chevron");
+
     if (this.isDropdownOpen) {
-      dropdownPanel.classList.add('open');
-      chevron.classList.add('open');
-      dropdownBtn.setAttribute('aria-expanded', 'true');
+      dropdownPanel.classList.add("open");
+      chevron.classList.add("open");
+      dropdownBtn.setAttribute("aria-expanded", "true");
       // Focus the first input in the dropdown for accessibility
       setTimeout(() => {
-        const folderInput = document.getElementById('cgis-folder-input');
+        const folderInput = document.getElementById("cgis-folder-input");
         if (folderInput) folderInput.focus();
       }, 100);
     } else {
-      dropdownPanel.classList.remove('open');
-      chevron.classList.remove('open');
-      dropdownBtn.setAttribute('aria-expanded', 'false');
+      dropdownPanel.classList.remove("open");
+      chevron.classList.remove("open");
+      dropdownBtn.setAttribute("aria-expanded", "false");
     }
   }
 
   closeDropdown() {
     this.isDropdownOpen = false;
-    const dropdownPanel = document.getElementById('cgis-dropdown-panel');
-    const dropdownBtn = document.getElementById('cgis-dropdown-btn');
-    const chevron = document.querySelector('.cgis-chevron');
-    dropdownPanel.classList.remove('open');
-    chevron.classList.remove('open');
-    if (dropdownBtn) dropdownBtn.setAttribute('aria-expanded', 'false');
+    const dropdownPanel = document.getElementById("cgis-dropdown-panel");
+    const dropdownBtn = document.getElementById("cgis-dropdown-btn");
+    const chevron = document.querySelector(".cgis-chevron");
+    dropdownPanel.classList.remove("open");
+    chevron.classList.remove("open");
+    if (dropdownBtn) dropdownBtn.setAttribute("aria-expanded", "false");
   }
 
   startDownload() {
     const images = this.findImages();
-    
+
     if (images.length === 0) {
-      this.updateProgressText('No images found');
+      this.updateProgressText("No images found");
       // Open dropdown to show the "no images" message
       if (!this.isDropdownOpen) {
         this.toggleDropdown();
@@ -221,15 +223,15 @@ class ChatGPTImageSaver {
         index: index,
         chatId: this.getCurrentChatId(),
         customFolder: this.customFolderName,
-        folderName: folderName
+        folderName: folderName,
       };
-      
+
       chrome.runtime.sendMessage(downloadInfo);
     });
   }
 
   getCurrentChatId() {
-    return window.location.pathname.split("/").pop() || 'unknown-chat';
+    return window.location.pathname.split("/").pop() || "unknown-chat";
   }
 
   findImages() {
@@ -243,13 +245,14 @@ class ChatGPTImageSaver {
       if (message.action === "downloadComplete") {
         this.downloadProgress.success++;
         // Remove from failed downloads if it was previously failed and now succeeded
-        this.failedDownloads = this.failedDownloads.filter(failed => 
-          !(failed.url === message.url && failed.index === message.index)
+        this.failedDownloads = this.failedDownloads.filter(
+          (failed) =>
+            !(failed.url === message.url && failed.index === message.index)
         );
         this.updateProgress();
       } else if (message.action === "downloadFailed") {
         this.downloadProgress.failed++;
-        
+
         // Store failed download info for retry
         const failedDownload = {
           url: message.url,
@@ -257,17 +260,18 @@ class ChatGPTImageSaver {
           error: message.error,
           chatId: this.getCurrentChatId(),
           customFolder: this.customFolderName,
-          folderName: this.customFolderName || this.getCurrentChatId()
+          folderName: this.customFolderName || this.getCurrentChatId(),
         };
-        
+
         // Add to failed downloads if not already present
-        const existingIndex = this.failedDownloads.findIndex(failed => 
-          failed.url === message.url && failed.index === message.index
+        const existingIndex = this.failedDownloads.findIndex(
+          (failed) =>
+            failed.url === message.url && failed.index === message.index
         );
         if (existingIndex === -1) {
           this.failedDownloads.push(failedDownload);
         }
-        
+
         this.updateProgress();
       }
     });
@@ -275,76 +279,94 @@ class ChatGPTImageSaver {
 
   updateProgress() {
     this.updateProgressBar();
-    
-    const completed = this.downloadProgress.success + this.downloadProgress.failed;
+
+    const completed =
+      this.downloadProgress.success + this.downloadProgress.failed;
     if (completed === this.downloadProgress.total) {
       if (this.downloadProgress.failed > 0) {
-        this.updateProgressText(`Complete! ${this.downloadProgress.success} successful, ${this.downloadProgress.failed} failed`);
+        this.updateProgressText(
+          `Complete! ${this.downloadProgress.success} successful, ${this.downloadProgress.failed} failed`
+        );
         this.showRetryButton();
       } else {
-        this.updateProgressText(`Complete! All ${this.downloadProgress.success} images downloaded successfully`);
+        this.updateProgressText(
+          `Complete! All ${this.downloadProgress.success} images downloaded successfully`
+        );
         this.hideRetryButton();
       }
     } else {
-      this.updateProgressText(`Downloading... ${completed}/${this.downloadProgress.total}`);
+      this.updateProgressText(
+        `Downloading... ${completed}/${this.downloadProgress.total}`
+      );
       this.hideRetryButton();
     }
   }
 
   updateProgressBar() {
-    const completed = this.downloadProgress.success + this.downloadProgress.failed;
-    const percentage = this.downloadProgress.total > 0 ? (completed / this.downloadProgress.total) * 100 : 0;
-    
-    const progressBar = document.querySelector('.cgis-progress-bar');
-    const progressFill = document.querySelector('.cgis-progress-fill');
-    const successSpan = document.querySelector('.cgis-success');
-    const failedSpan = document.querySelector('.cgis-failed');
-    
-    if (progressBar) progressBar.setAttribute('aria-valuenow', percentage.toString());
+    const completed =
+      this.downloadProgress.success + this.downloadProgress.failed;
+    const percentage =
+      this.downloadProgress.total > 0
+        ? (completed / this.downloadProgress.total) * 100
+        : 0;
+
+    const progressBar = document.querySelector(".cgis-progress-bar");
+    const progressFill = document.querySelector(".cgis-progress-fill");
+    const successSpan = document.querySelector(".cgis-success");
+    const failedSpan = document.querySelector(".cgis-failed");
+
+    if (progressBar)
+      progressBar.setAttribute("aria-valuenow", percentage.toString());
     if (progressFill) progressFill.style.width = `${percentage}%`;
-    if (successSpan) successSpan.textContent = `✓ ${this.downloadProgress.success}`;
-    if (failedSpan) failedSpan.textContent = `✗ ${this.downloadProgress.failed}`;
+    if (successSpan)
+      successSpan.textContent = `✓ ${this.downloadProgress.success}`;
+    if (failedSpan)
+      failedSpan.textContent = `✗ ${this.downloadProgress.failed}`;
   }
 
   updateProgressText(text) {
-    const progressText = document.querySelector('.cgis-progress-text');
+    const progressText = document.querySelector(".cgis-progress-text");
     if (progressText) progressText.textContent = text;
   }
 
   showRetryButton() {
-    const retrySection = document.getElementById('cgis-retry-section');
+    const retrySection = document.getElementById("cgis-retry-section");
     if (retrySection) {
-      retrySection.style.display = 'block';
+      retrySection.style.display = "block";
     }
   }
 
   hideRetryButton() {
-    const retrySection = document.getElementById('cgis-retry-section');
+    const retrySection = document.getElementById("cgis-retry-section");
     if (retrySection) {
-      retrySection.style.display = 'none';
+      retrySection.style.display = "none";
     }
   }
 
   retryFailedDownloads() {
     if (this.failedDownloads.length === 0) {
-      this.updateProgressText('No failed downloads to retry');
+      this.updateProgressText("No failed downloads to retry");
       return;
     }
 
     // Check if we've exceeded max retry attempts
     if (this.retryAttempts >= this.maxRetryAttempts) {
-      this.updateProgressText(`Max retry attempts (${this.maxRetryAttempts}) reached. ${this.failedDownloads.length} images still failed.`);
+      this.updateProgressText(
+        `Max retry attempts (${this.maxRetryAttempts}) reached. ${this.failedDownloads.length} images still failed.`
+      );
       return;
     }
 
     this.retryAttempts++;
     this.hideRetryButton();
-    
+
     // Reset only the failed count for the retry
     const failedCount = this.failedDownloads.length;
     this.downloadProgress.failed = 0;
-    
-    this.updateProgressText(`Retry attempt ${this.retryAttempts}/${this.maxRetryAttempts}: Retrying ${failedCount} failed images...`);
+
+    this.updateProgressText(
+      `Retry attempt ${this.retryAttempts}/${this.maxRetryAttempts}: Retrying ${failedCount} failed images...`
+    );
     this.updateProgressBar();
 
     // Make a copy of failed downloads since the array may be modified during retry
@@ -359,9 +381,9 @@ class ChatGPTImageSaver {
         index: failedDownload.index,
         chatId: failedDownload.chatId,
         customFolder: failedDownload.customFolder,
-        folderName: failedDownload.folderName
+        folderName: failedDownload.folderName,
       };
-      
+
       chrome.runtime.sendMessage(downloadInfo);
     });
   }
